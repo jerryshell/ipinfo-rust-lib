@@ -266,17 +266,17 @@ impl IpInfo {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::IpErrorKind;
 
-    // fn get_ipinfo_client() -> IpInfo {
-    //     IpInfo::new(IpInfoConfig {
-    //         token: Some(std::env::var("IPINFO_TOKEN").unwrap()),
-    //         timeout: Duration::from_secs(3),
-    //         cache_size: 100,
-    //         ..Default::default()
-    //     })
-    //     .expect("should construct")
-    // }
+    fn get_ipinfo_client() -> IpInfo {
+        dotenv::dotenv().ok();
+        IpInfo::new(IpInfoConfig {
+            token: Some(std::env::var("IPINFO_TOKEN").unwrap()),
+            timeout: Duration::from_secs(3),
+            cache_size: 100,
+            ..Default::default()
+        })
+        .expect("should construct")
+    }
 
     #[test]
     fn ipinfo_config_defaults_reasonable() {
@@ -295,15 +295,15 @@ mod tests {
         assert_eq!(headers[ACCEPT], "application/json");
     }
 
-    // #[test]
-    // fn request_single_ip() {
-    //     let mut ipinfo = get_ipinfo_client();
+    #[test]
+    fn request_single_ip() {
+        let mut ipinfo = get_ipinfo_client();
 
-    //     let details = ipinfo.lookup(&["66.87.125.72"]).expect("should lookup");
+        let details = ipinfo.lookup(&["66.87.125.72"]).expect("should lookup");
 
-    //     assert!(details.contains_key("66.87.125.72"));
-    //     assert_eq!(details.len(), 1);
-    // }
+        assert!(details.contains_key("66.87.125.72"));
+        assert_eq!(details.len(), 1);
+    }
 
     #[test]
     fn request_single_ip_no_token() {
@@ -311,85 +311,85 @@ mod tests {
 
         assert_eq!(
             ipinfo.lookup(&["8.8.8.8"]).err().unwrap().kind(),
-            IpErrorKind::IpRequestError
+            crate::IpErrorKind::IpRequestError
         );
     }
 
-    // #[test]
-    // fn request_multiple_ip() {
-    //     let mut ipinfo = get_ipinfo_client();
+    #[test]
+    fn request_multiple_ip() {
+        let mut ipinfo = get_ipinfo_client();
 
-    //     let details = ipinfo
-    //         .lookup(&["8.8.8.8", "4.2.2.4"])
-    //         .expect("should lookup");
+        let details = ipinfo
+            .lookup(&["8.8.8.8", "4.2.2.4"])
+            .expect("should lookup");
 
-    //     // Assert successful lookup
-    //     assert!(details.contains_key("8.8.8.8"));
-    //     assert!(details.contains_key("4.2.2.4"));
+        // Assert successful lookup
+        assert!(details.contains_key("8.8.8.8"));
+        assert!(details.contains_key("4.2.2.4"));
 
-    //     // Assert 8.8.8.8
-    //     let ip8 = &details["8.8.8.8"];
-    //     assert_eq!(ip8.ip, "8.8.8.8");
-    //     assert_eq!(ip8.hostname, Some("dns.google".to_owned()));
-    //     assert_eq!(ip8.city, "Mountain View");
-    //     assert_eq!(ip8.region, "California");
-    //     assert_eq!(ip8.country, "US");
-    //     assert_eq!(
-    //         ip8.country_flag,
-    //         Some(CountryFlag {
-    //             emoji: "🇺🇸".to_owned(),
-    //             unicode: "U+1F1FA U+1F1F8".to_owned()
-    //         })
-    //     );
-    //     assert_eq!(
-    //         ip8.country_currency,
-    //         Some(CountryCurrency {
-    //             code: "USD".to_owned(),
-    //             symbol: "$".to_owned()
-    //         })
-    //     );
-    //     assert_eq!(
-    //         ip8.continent,
-    //         Some(Continent {
-    //             code: "NA".to_owned(),
-    //             name: "North America".to_owned()
-    //         })
-    //     );
-    //     assert_eq!(ip8.loc, "37.4056,-122.0775");
-    //     assert_eq!(ip8.postal, Some("94043".to_owned()));
-    //     assert_eq!(ip8.timezone, Some("America/Los_Angeles".to_owned()));
+        // Assert 8.8.8.8
+        let ip8 = &details["8.8.8.8"];
+        assert_eq!(ip8.ip, "8.8.8.8");
+        assert_eq!(ip8.hostname, Some("dns.google".to_owned()));
+        assert_eq!(ip8.city, "Mountain View");
+        assert_eq!(ip8.region, "California");
+        assert_eq!(ip8.country, "US");
+        assert_eq!(
+            ip8.country_flag,
+            Some(CountryFlag {
+                emoji: "🇺🇸".to_owned(),
+                unicode: "U+1F1FA U+1F1F8".to_owned()
+            })
+        );
+        assert_eq!(
+            ip8.country_currency,
+            Some(CountryCurrency {
+                code: "USD".to_owned(),
+                symbol: "$".to_owned()
+            })
+        );
+        assert_eq!(
+            ip8.continent,
+            Some(Continent {
+                code: "NA".to_owned(),
+                name: "North America".to_owned()
+            })
+        );
+        assert_eq!(ip8.loc, "37.4056,-122.0775");
+        assert_eq!(ip8.postal, Some("94043".to_owned()));
+        assert_eq!(ip8.timezone, Some("America/Los_Angeles".to_owned()));
 
-    //     // Assert 4.2.2.4
-    //     let ip4 = &details["4.2.2.4"];
-    //     assert_eq!(ip4.ip, "4.2.2.4");
-    //     assert_eq!(ip4.hostname, Some("d.resolvers.level3.net".to_owned()));
-    //     assert_eq!(ip4.city, "Monroe");
-    //     assert_eq!(ip4.region, "Louisiana");
-    //     assert_eq!(ip4.country, "US");
-    //     assert_eq!(ip4.loc, "32.5530,-92.0422");
-    //     assert_eq!(ip4.postal, Some("71203".to_owned()));
-    //     assert_eq!(ip4.timezone, Some("America/Chicago".to_owned()));
-    // }
+        // Assert 4.2.2.4
+        let ip4 = &details["4.2.2.4"];
+        assert_eq!(ip4.ip, "4.2.2.4");
+        assert_eq!(ip4.hostname, Some("d.resolvers.level3.net".to_owned()));
+        assert_eq!(ip4.city, "Monroe");
+        assert_eq!(ip4.region, "Louisiana");
+        assert_eq!(ip4.country, "US");
+        assert_eq!(ip4.loc, "32.5530,-92.0422");
+        assert_eq!(ip4.postal, Some("71203".to_owned()));
+        assert_eq!(ip4.timezone, Some("America/Chicago".to_owned()));
+    }
 
-    // #[test]
-    // fn request_cache_miss_and_hit() {
-    //     let mut ipinfo = get_ipinfo_client();
+    #[test]
+    fn request_cache_miss_and_hit() {
+        let mut ipinfo = get_ipinfo_client();
 
-    //     // Populate the cache with 8.8.8.8
-    //     let details = ipinfo.lookup(&["8.8.8.8"]).expect("should lookup");
+        // Populate the cache with 8.8.8.8
+        let details = ipinfo.lookup(&["8.8.8.8"]).expect("should lookup");
 
-    //     // Assert 1 result
-    //     assert!(details.contains_key("8.8.8.8"));
-    //     assert_eq!(details.len(), 1);
+        // Assert 1 result
+        assert!(details.contains_key("8.8.8.8"));
+        assert_eq!(details.len(), 1);
 
-    //     // Should have a cache hit for 8.8.8.8 and query for 4.2.2.4
-    //     let details = ipinfo
-    //         .lookup(&["4.2.2.4", "8.8.8.8"])
-    //         .expect("should lookup");
+        // Should have a cache hit for 8.8.8.8 and query for 4.2.2.4
+        let details = ipinfo
+            .lookup(&["4.2.2.4", "8.8.8.8"])
+            .expect("should lookup");
 
-    //     // Assert 2 results
-    //     assert!(details.contains_key("8.8.8.8"));
-    //     assert!(details.contains_key("4.2.2.4"));
-    //     assert_eq!(details.len(), 2);
-    // }
+        // Assert 2 results
+        assert!(details.contains_key("8.8.8.8"));
+        assert!(details.contains_key("4.2.2.4"));
+        assert_eq!(details.len(), 2);
+    }
 }
