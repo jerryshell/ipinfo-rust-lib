@@ -18,7 +18,11 @@ keywords = ["ip", "geolocation", "ipinfo", "ip-address"]
 exclude = [".gitignore", ".travis.yml", ".cargo/config"]
 
 [dependencies]
-reqwest = { version = "0.11", features = ["rustls-tls", "blocking", "json"] }
+reqwest = { version = "0.11", default-features = false, features = [
+    "rustls-tls",
+    "blocking",
+    "json",
+] }
 lru = "0.9"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
