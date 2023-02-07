@@ -5,5 +5,5 @@ Fork From: [https://github.com/ipinfo/rust](https://github.com/ipinfo/rust)
 Jerry Fork Edition New Features:
 
 * Rust Edition: 2018 -> 2021
-* `reqwest`: 0.9 -> 0.11
+* `reqwest`: 0.9 -> 0.11, default-tls -> rustls-tls
 * `lru`: 0.6 -> 0.9
