@@ -32,18 +32,16 @@
 //! ```no_run
 //! use ipinfo::{IpInfo, IpInfoConfig};
 //!
-//! fn main() {
-//!   // Setup token and other configurations.
-//!   let config = IpInfoConfig { token: Some("my token".to_string()), ..Default::default() };
+//! // Setup token and other configurations.
+//! let config = IpInfoConfig { token: Some("my token".to_string()), ..Default::default() };
 //!
-//!   // Setup IpInfo structure and start looking up IP addresses.
-//!   let mut ipinfo = IpInfo::new(config).expect("should construct");
-//!   let res = ipinfo.lookup(&["8.8.8.8", "4.2.2.4"]);
+//! // Setup IpInfo structure and start looking up IP addresses.
+//! let mut ipinfo = IpInfo::new(config).expect("should construct");
+//! let res = ipinfo.lookup(&["8.8.8.8", "4.2.2.4"]);
 //!
-//!   match res {
-//!     Ok(r) => println!("{}: {}", "8.8.8.8", r["8.8.8.8"].hostname.as_ref().unwrap()),
-//!     Err(e) => println!("error occurred: {}", &e.to_string()),
-//!   }
+//! match res {
+//!   Ok(r) => println!("{}: {}", "8.8.8.8", r["8.8.8.8"].hostname.as_ref().unwrap()),
+//!   Err(e) => println!("error occurred: {}", &e.to_string()),
 //! }
 //! ```
 
